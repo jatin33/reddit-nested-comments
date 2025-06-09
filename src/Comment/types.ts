@@ -13,3 +13,8 @@ export interface ExtendedComment extends IComment {
 }
 
 export type CommentStateDataShape = Record<number, ExtendedComment>;
+
+export type NormalizedCommentDataShape = {
+  comments: CommentStateDataShape;
+  rootIds: number[];
+}

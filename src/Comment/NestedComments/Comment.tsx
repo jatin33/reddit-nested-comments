@@ -1,31 +1,34 @@
-import { useState } from 'react';
-import type { CommentStateDataShape, ExtendedComment } from '../types';
+import { memo, useState } from 'react';
+import type { CommentStateDataShape, ExtendedComment, NormalizedCommentDataShape } from '../types';
 
-interface Props extends ExtendedComment {
-  overallData: CommentStateDataShape;
+interface Props {
+  // replyMode: boolean;
+  // setReplyMode: React.Dispatch<React.SetStateAction<boolean>>;
+  comment: ExtendedComment;
   onUpvote: (comment_id: number) => void;
   onDownvote: (comment_id: number) => void;
   onEdit: (updatedContent: string, comment_id: number) => void;
-  onReply: (newContent: string, comment_id: number, parent_comment_id: number) => void;
+  // onReply: (newContent: string, comment_id: number, parent_comment_id: number) => void;
 }
 
 function Comment({
-  comment_id,
-  username,
-  upvotes,
-  downvotes,
-  content,
-  date_created,
+  // comment_id,
+  // username,
+  // upvotes,
+  // downvotes,
+  // content,
+  // date_created,
+  comment,
+  // replyMode,
+  // setReplyMode,
   onDownvote,
   onUpvote,
   onEdit,
-  onReply,
-  overallData,
-  children,
+  // onReply,
 }: Props) {
+  const { comment_id, username, upvotes, downvotes, content, date_created } = comment;
   const [editMode, setEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
-  const [replyMode, setReplyMode] = useState(false);
   const [repliedContent, setRepliedContent] = useState("");
 
   return (
@@ -47,6 +50,7 @@ function Comment({
               style={{
                 flexBasis: "80%"
               }}
+              rows={3}
             />
             <button
               onClick={() => {
@@ -85,9 +89,11 @@ function Comment({
           >
             Downvote
           </button>
-          <button onClick={() => {
+          {/* <button onClick={() => {
             setReplyMode(s => !s);
-          }}>Reply</button>
+          }}>
+            {replyMode ? "Hide Replies" : "Reply"}
+          </button> */}
           <button
             onClick={() => {
               setEditMode((s) => !s);
@@ -98,22 +104,25 @@ function Comment({
           <button>Delete</button>
         </div>
       </div>
-      <div>
+      {/* <div>
         {replyMode
           ? <div>
             <div className="flex" style={{
               width: "100%",
               alignItems: "center",
-              gap: "4px"
+              gap: "4px",
+              paddingTop: "8px",
+              paddingBottom: "8px"
             }}>
-              <textarea 
-                value={repliedContent} 
+              <textarea
+                value={repliedContent}
                 onChange={(e) => {
                   setRepliedContent(e.target.value);
-                }} 
+                }}
                 style={{
                   flexBasis: "80%"
                 }}
+                rows={3}
               />
               <button
                 onClick={() => {
@@ -126,29 +135,11 @@ function Comment({
                 Submit Reply
               </button>
             </div>
-            {children && children?.length > 0 && children.map((childId) => (
-              <div
-                style={{
-                  paddingLeft: '1rem',
-                  paddingTop: '1rem',
-                  borderLeft: "1px solid black"
-                }}
-              >
-                <Comment
-                  {...overallData[childId]}
-                  overallData={overallData}
-                  onDownvote={onDownvote}
-                  onUpvote={onUpvote}
-                  onEdit={onEdit}
-                  onReply={onReply}
-                />
-              </div>
-            ))}
           </div>
           : null}
-      </div>
+      </div> */}
     </div>
   );
 }
 
-export default Comment;
+export default memo(Comment);
