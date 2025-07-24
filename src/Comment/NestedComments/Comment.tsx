@@ -27,6 +27,7 @@ function Comment({
   // onReply,
 }: Props) {
   const { comment_id, username, upvotes, downvotes, content, date_created } = comment;
+  console.log('Rendering Comment:', comment_id);
   const [editMode, setEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
   const [repliedContent, setRepliedContent] = useState("");
@@ -104,42 +105,22 @@ function Comment({
           <button>Delete</button>
         </div>
       </div>
-      {/* <div>
-        {replyMode
-          ? <div>
-            <div className="flex" style={{
-              width: "100%",
-              alignItems: "center",
-              gap: "4px",
-              paddingTop: "8px",
-              paddingBottom: "8px"
-            }}>
-              <textarea
-                value={repliedContent}
-                onChange={(e) => {
-                  setRepliedContent(e.target.value);
-                }}
-                style={{
-                  flexBasis: "80%"
-                }}
-                rows={3}
-              />
-              <button
-                onClick={() => {
-                  if (repliedContent.length > 0) {
-                    onReply(repliedContent, Date.now(), comment_id);
-                    setRepliedContent("");
-                  }
-                }}
-              >
-                Submit Reply
-              </button>
-            </div>
-          </div>
-          : null}
-      </div> */}
     </div>
   );
 }
 
-export default memo(Comment);
+const areCommentEqual = (prevProps: Props, nextProps: Props): boolean => {
+  const prev = prevProps.comment;
+  const next = nextProps.comment;
+  
+  return (
+    prev.comment_id === next.comment_id &&
+    prev.content === next.content &&
+    prev.upvotes === next.upvotes &&
+    prev.downvotes === next.downvotes &&
+    prev.username === next.username &&
+    prev.date_created === next.date_created
+  );
+};
+
+export default memo(Comment, areCommentEqual);

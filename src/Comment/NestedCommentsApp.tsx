@@ -114,13 +114,9 @@ function reducer(state: NormalizedCommentDataShape, action: {
 }
 
 function NestedCommentsApp() {
-  // const [nestedCommentsData, setNestedCommentsData] =
-  //   useState<NormalizedCommentDataShape>(
-  //     transformDataForOperation(commentsData as any)
-  //   );
   const [nestedCommentsData, dispatch] = useReducer(reducer, transformDataForOperation(commentsData as any))
 
-  console.log('nestedCommentsData>>', nestedCommentsData);
+  console.log('NestedCommentsApp re-rendered with data:', Object.keys(nestedCommentsData.comments).length, 'comments');
 
   const handleUpvote = useCallback((comment_id: number) => {
     dispatch({ type: "UPVOTE", payload: { comment_id } })
@@ -155,11 +151,6 @@ function NestedCommentsApp() {
     // setNestedCommentsData(updatedCommentsData);
   };
 
-  const getCommentById = useCallback(
-    (id: number) => nestedCommentsData.comments[id],
-    [nestedCommentsData.comments]
-  );
-
   return <div
     className='p-4'
     style={{
@@ -170,11 +161,11 @@ function NestedCommentsApp() {
     {nestedCommentsData.rootIds.map(id => (
       <CommentContainer
         key={id}
-        comment={nestedCommentsData.comments[id]}    // Pass only this comment node
-        getCommentById={getCommentById}  // optional for recursion
+        comment={nestedCommentsData.comments[id]}
         onUpvote={handleUpvote}
         onDownvote={handleDownvote}
         onEdit={handleEdit}
+        allComments={nestedCommentsData.comments}
       />
     ))}
   </div>;
